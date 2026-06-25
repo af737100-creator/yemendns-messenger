@@ -1,0 +1,6 @@
+{
+  "name": "DNS Messenger",
+  "description": "تطبيق مراسلات ومحاكاة دردشة آمنة ومبتكرة تعمل بالكامل عبر بروتوكولات ونفق الـ DNS لضمان استمرارية الخدمة حتى عند نفاد رصيد الإنترنت.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

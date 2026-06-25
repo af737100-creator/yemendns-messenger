@@ -1,0 +1,55 @@
+name: Build YemenDNS Messenger APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile Android App (APK)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install System and Project Dependencies
+        run: npm install
+
+      - name: Build Web Application (Vite/React)
+        run: npm run build
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Bootstrap Capacitor Android Platform
+        run: |
+          npx cap add android
+          npx cap sync
+
+      - name: grant executable permissions on Gradlew script
+        run: chmod +x android/gradlew
+
+      - name: Compile and Package Android Debug APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Publish Compiled APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yemendns-messenger-app
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
